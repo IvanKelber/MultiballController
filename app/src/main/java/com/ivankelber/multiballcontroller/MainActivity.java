@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 public void call(Object... args) {
                     JSONObject obj = new JSONObject();
                     try {
-                        obj.put("client_id",clientIdEditText.getText().toString());
-                        Log.d("MESSAGE",obj.getString("client_id"));
+                        obj.put("word",clientIdEditText.getText().toString());
+                        Log.d("MESSAGE",obj.getString("word"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Log.d("JSON EXCPETION",e.getStackTrace().toString());
