@@ -17,6 +17,9 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URISyntaxException;
 
 import io.socket.client.IO;
@@ -52,7 +55,15 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void call(Object... args) {
-                    Log.d("Received Init","Great");
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.put("client_id",clientIdEditText.getText().toString());
+                        Log.d("MESSAGE",obj.getString("client_id"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.d("JSON EXCPETION",e.getStackTrace().toString());
+                    }
+                    socket.emit("new controller",obj);
                 }
             });
         } catch (URISyntaxException e) {
