@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText clientIdEditText = (EditText) findViewById(R.id.client_id_edit_text);
         try {
-            socket = IO.socket("https://cryptic-gorge-96821.herokuapp.com/");
+            socket = IO.socket("https://cryptic-gorge-96821.herokuapp.com");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void call(Object... args) {
-
+                    Log.d("Received Init","Great");
                 }
             });
         } catch (URISyntaxException e) {
