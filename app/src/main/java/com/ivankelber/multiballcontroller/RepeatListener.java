@@ -15,30 +15,33 @@ public class RepeatListener implements OnTouchListener{
 
     private int initialInterval;
     private final int regularInterval;
-    private final OnClickListener clickListener;
-    private final OnTouchListener releaseListener;
+//    private final OnClickListener clickListener;
+//    private final OnTouchListener releaseListener;
+
+    private HoldListener holdListener;
 
     private Runnable handlerRunnable = new Runnable() {
 
         @Override
         public void run() {
             handler.postDelayed(this,regularInterval);
-            clickListener.onClick(heldView);
+            holdListener.onHeld(heldView);
         }
     };
 
     private View heldView;
 
-    public RepeatListener(int initialInterval,int regularInterval,OnClickListener clickListener,OnTouchListener releaseListener) {
-        if (clickListener == null)
+    public RepeatListener(int initialInterval,int regularInterval,HoldListener holdListener) {
+        if (holdListener == null)
             throw new IllegalArgumentException("null runnable");
         if (initialInterval < 0 || regularInterval < 0)
             throw new IllegalArgumentException("negative interval");
 
         this.initialInterval = initialInterval;
         this.regularInterval = regularInterval;
-        this.clickListener = clickListener;
-        this.releaseListener = releaseListener;
+        this.holdListener = holdListener;
+//        this.clickListener = clickListener;
+//        this.releaseListener = releaseListener;
     }
 
 
@@ -52,12 +55,12 @@ public class RepeatListener implements OnTouchListener{
                 handler.postDelayed(handlerRunnable, initialInterval);
                 heldView = v;
                 heldView.setPressed(true);
-                clickListener.onClick(v);
+                holdListener.onHeld(v);
                 return true;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 //Released
-                releaseListener.onTouch(v,event);
+                holdListener.onRelease(v);
                 handler.removeCallbacks(handlerRunnable);
                 heldView.setPressed(false);
                 heldView = null;

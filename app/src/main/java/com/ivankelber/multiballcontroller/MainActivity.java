@@ -196,23 +196,37 @@ public class MainActivity extends AppCompatActivity {
         int[] button_ids = {R.id.left_button,R.id.right_button,R.id.up_button,R.id.down_button};
         for(final int id : button_ids) {
             Button b = (Button) findViewById(id);
-            b.setOnTouchListener(new RepeatListener(1000 / 60, 1000 / 60, new View.OnClickListener() {
+//            b.setOnTouchListener(new RepeatListener(1000 / 60, 1000 / 60, new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                   emitKeyDown(id);
+//                }
+//            }, new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    emitKeyUp(id);
+//                    return false;
+//                }
+//            }));
+
+            b.setOnTouchListener(new RepeatListener(1000 / 60, 1000 / 60, new HoldListener() {
+
                 @Override
-                public void onClick(View v) {
-                   emitKeyDown(id);
+                public void onRelease(View v) {
+                    emitKeyUp(v);
                 }
-            }, new View.OnTouchListener() {
+
                 @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    emitKeyUp(id);
-                    return false;
+                public void onHeld(View v) {
+                    emitKeyDown(v);
                 }
             }));
 
         }
     }
 
-    public void emitKeyDown(int id) {
+    public void emitKeyDown(View v) {
+        int id = v.getId();
         switch(id) {
             case R.id.left_button:
                 Log.d("BUTTON PRESSED","Left");
@@ -231,7 +245,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }    }
 
-    public void emitKeyUp(int id) {
+    public void emitKeyUp(View v) {
+        int id = v.getId();
         switch(id) {
             case R.id.left_button:
                 Log.d("BUTTON RELEASED","Left");
@@ -248,5 +263,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.down_button:
                 Log.d("BUTTON RELEASED","Down");
                 break;
-        }    }
+        }
+    }
+
+
 }
