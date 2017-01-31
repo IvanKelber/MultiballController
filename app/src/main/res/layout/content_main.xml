@@ -16,7 +16,45 @@
         android:id="@+id/client_id_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Client ID" />
+        android:hint="Client ID"
+        android:inputType="text"
+        android:imeOptions="actionGo"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Left"
+        android:id="@+id/left_button"
+        android:layout_below="@+id/up_button"
+        android:layout_alignParentStart="true"
+        android:onClick="directionButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Right"
+        android:id="@+id/right_button"
+        android:layout_below="@+id/up_button"
+        android:layout_alignParentEnd="true"
+        android:onClick="directionButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Down"
+        android:id="@+id/down_button"
+        android:layout_below="@+id/up_button"
+        android:layout_centerHorizontal="true"
+        android:onClick="directionButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Up"
+        android:id="@+id/up_button"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="directionButton" />
 
 
 </RelativeLayout>

@@ -7,10 +7,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -45,6 +48,21 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final EditText clientIdEditText = (EditText) findViewById(R.id.client_id_edit_text);
+        clientIdEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    if(socket != null) {
+                        socket.connect();
+                        handled = true;
+                    }
+                }
+                return handled;
+            }
+        });
+
+
         try {
             socket = IO.socket("https://cryptic-gorge-96821.herokuapp.com");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
@@ -92,24 +110,18 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+            }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Log.d("DISCONNECT","disconnect");
+                }
             });
+
+
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String clientId = clientIdEditText.getText().toString();
-                Snackbar.make(view, "Connecting to client: " + clientId, Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-
-                if(socket != null) {
-                    socket.connect();
-                }
-            }
-        });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -175,5 +187,26 @@ public class MainActivity extends AppCompatActivity {
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+
+    public void directionButton(View v) {
+        int id = v.getId();
+        switch(id) {
+            case R.id.left_button:
+                Log.d("BUTTON PRESSED","Left");
+                break;
+            case R.id.right_button:
+                Log.d("BUTTON PRESSED","Right");
+
+                break;
+            case R.id.up_button:
+                Log.d("BUTTON PRESSED","Up");
+
+                break;
+            case R.id.down_button:
+                Log.d("BUTTON PRESSED","Down");
+
+                break;
+        }
     }
 }
