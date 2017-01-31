@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 return handled;
             }
         });
-
+        setButtonHandlers();
 
         try {
             socket = IO.socket("https://cryptic-gorge-96821.herokuapp.com");
@@ -194,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         switch(id) {
             case R.id.left_button:
                 Log.d("BUTTON PRESSED","Left");
-                socket.emit("controller left");
+//                socket.emit("controller left");
                 break;
             case R.id.right_button:
                 Log.d("BUTTON PRESSED","Right");
@@ -209,4 +211,62 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    public void setButtonHandlers() {
+        int[] button_ids = {R.id.left_button,R.id.right_button,R.id.up_button,R.id.down_button};
+        for(final int id : button_ids) {
+            Button b = (Button) findViewById(id);
+            b.setOnTouchListener(new RepeatListener(1000 / 60, 1000 / 60, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   emitKeyDown(id);
+                }
+            }, new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    emitKeyUp(id);
+                    return false;
+                }
+            }));
+
+        }
+    }
+
+    public void emitKeyDown(int id) {
+        switch(id) {
+            case R.id.left_button:
+                Log.d("BUTTON PRESSED","Left");
+//                socket.emit("controller left");
+                break;
+            case R.id.right_button:
+                Log.d("BUTTON PRESSED","Right");
+
+                break;
+            case R.id.up_button:
+                Log.d("BUTTON PRESSED","Up");
+
+                break;
+            case R.id.down_button:
+                Log.d("BUTTON PRESSED","Down");
+                break;
+        }    }
+
+    public void emitKeyUp(int id) {
+        switch(id) {
+            case R.id.left_button:
+                Log.d("BUTTON RELEASED","Left");
+//                socket.emit("controller left");
+                break;
+            case R.id.right_button:
+                Log.d("BUTTON RELEASED","Right");
+
+                break;
+            case R.id.up_button:
+                Log.d("BUTTON RELEASED","Up");
+
+                break;
+            case R.id.down_button:
+                Log.d("BUTTON RELEASED","Down");
+                break;
+        }    }
 }
