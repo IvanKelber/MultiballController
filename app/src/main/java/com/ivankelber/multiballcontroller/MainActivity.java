@@ -191,26 +191,6 @@ public class MainActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-    public void directionButton(View v) {
-        int id = v.getId();
-        switch(id) {
-            case R.id.left_button:
-                Log.d("BUTTON PRESSED","Left");
-//                socket.emit("controller left");
-                break;
-            case R.id.right_button:
-                Log.d("BUTTON PRESSED","Right");
-
-                break;
-            case R.id.up_button:
-                Log.d("BUTTON PRESSED","Up");
-
-                break;
-            case R.id.down_button:
-                Log.d("BUTTON PRESSED","Down");
-                break;
-        }
-    }
 
     public void setButtonHandlers() {
         int[] button_ids = {R.id.left_button,R.id.right_button,R.id.up_button,R.id.down_button};
