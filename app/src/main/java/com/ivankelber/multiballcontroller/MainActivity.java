@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private GoogleApiClient client;
     private Socket socket;
+    private String webClientId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +58,39 @@ public class MainActivity extends AppCompatActivity {
                 public void call(Object... args) {
                     JSONObject obj = new JSONObject();
                     try {
-                        obj.put("word",clientIdEditText.getText().toString());
-                        Log.d("MESSAGE",obj.getString("word"));
+                        obj.put("word", clientIdEditText.getText().toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Log.d("JSON EXCPETION",e.getStackTrace().toString());
+                        Log.d("JSON EXCPETION", e.getStackTrace().toString());
                     }
-                    socket.emit("new controller",obj);
+                    socket.emit("new controller", obj);
+                }
+            }).on("web client disconnect", new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    JSONObject obj = (JSONObject) args[0];
+                    try {
+                        Log.d("WEB CLIENT DISCONNECTED","passed: " + obj.get("id").toString());
+                        Log.d("WEB CLIENT DISCONNECTED","stored: " + webClientId);
+                        Log.d("WEB CLIENT DISCONNECTED","My ID: " + socket.id());
+                        if(obj.get("id").toString().equals(webClientId)) {
+
+                            socket.disconnect();
+                            webClientId = "";
+                        }
+                    } catch(JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).on("web client connected", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        webClientId = ((JSONObject) args[0]).get("id").toString();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } catch (URISyntaxException e) {
