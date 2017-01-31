@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         switch(id) {
             case R.id.left_button:
                 Log.d("BUTTON PRESSED","Left");
+                socket.emit("controller left");
                 break;
             case R.id.right_button:
                 Log.d("BUTTON PRESSED","Right");
@@ -205,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.down_button:
                 Log.d("BUTTON PRESSED","Down");
-
                 break;
         }
     }
