@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         socket.connect();
                         handled = true;
                         hideSoftKeyboard(MainActivity.this);
+                        toggleConnectionInterface(true);
                     }
                 }
                 return handled;
@@ -279,11 +280,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void hideSoftKeyboard(Activity activity) {
+    public void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
+    public void toggleConnectionInterface(boolean connected) {
+        EditText et = (EditText) findViewById(R.id.client_id_edit_text);
+        Button disconnect = (Button) findViewById(R.id.disconnect_button);
+        if(connected) {
+            et.setVisibility(View.GONE);
+            disconnect.setVisibility(View.VISIBLE);
+        } else {
+            et.setVisibility(View.VISIBLE);
+            disconnect.setVisibility(View.GONE);
+        }
+    }
+
+    public void onDisconnect(View v) {
+        toggleConnectionInterface(false);
+        socket.disconnect();
+        webClientId = "";
+
+    }
 }
