@@ -3,13 +3,10 @@ package com.ivankelber.multiballcontroller;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +15,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -85,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
                         obj.put("word", clientIdEditText.getText().toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Log.d("JSON EXCPETION", e.getStackTrace().toString());
                     }
                     socket.emit("new controller", obj);
                 }
@@ -195,6 +190,11 @@ public class MainActivity extends AppCompatActivity {
         client.disconnect();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        onDisconnect(null);
+    }
 
     public void setButtonHandlers() {
         int[] button_ids = {R.id.left_button,R.id.right_button,R.id.up_button,R.id.down_button};
@@ -284,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
+
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
