@@ -1,5 +1,6 @@
 package com.ivankelber.multiballcontroller;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     if(socket != null) {
                         socket.connect();
                         handled = true;
+                        hideSoftKeyboard(MainActivity.this);
                     }
                 }
                 return handled;
@@ -276,5 +279,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
 
 }
