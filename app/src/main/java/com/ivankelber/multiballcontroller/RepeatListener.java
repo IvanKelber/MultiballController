@@ -15,9 +15,6 @@ public class RepeatListener implements OnTouchListener{
 
     private int initialInterval;
     private final int regularInterval;
-//    private final OnClickListener clickListener;
-//    private final OnTouchListener releaseListener;
-
     private HoldListener holdListener;
 
     private Runnable handlerRunnable = new Runnable() {
@@ -40,8 +37,6 @@ public class RepeatListener implements OnTouchListener{
         this.initialInterval = initialInterval;
         this.regularInterval = regularInterval;
         this.holdListener = holdListener;
-//        this.clickListener = clickListener;
-//        this.releaseListener = releaseListener;
     }
 
 

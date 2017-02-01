@@ -194,22 +194,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void setButtonHandlers() {
         int[] button_ids = {R.id.left_button,R.id.right_button,R.id.up_button,R.id.down_button};
-        for(final int id : button_ids) {
+        for(int id : button_ids) {
             Button b = (Button) findViewById(id);
-//            b.setOnTouchListener(new RepeatListener(1000 / 60, 1000 / 60, new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                   emitKeyDown(id);
-//                }
-//            }, new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    emitKeyUp(id);
-//                    return false;
-//                }
-//            }));
-
-            b.setOnTouchListener(new RepeatListener(1000 / 60, 1000 / 60, new HoldListener() {
+            b.setOnTouchListener(new RepeatListener(400,100, new HoldListener() {
 
                 @Override
                 public void onRelease(View v) {
@@ -226,43 +213,66 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void emitKeyDown(View v) {
-        int id = v.getId();
-        switch(id) {
+        JSONObject obj = new JSONObject();
+        int key = 0;
+
+        switch(v.getId()) {
             case R.id.left_button:
                 Log.d("BUTTON PRESSED","Left");
-//                socket.emit("controller left");
-                break;
-            case R.id.right_button:
-                Log.d("BUTTON PRESSED","Right");
-
+                key = 37;
                 break;
             case R.id.up_button:
                 Log.d("BUTTON PRESSED","Up");
-
+                key = 38;
+                break;
+            case R.id.right_button:
+                Log.d("BUTTON PRESSED","Right");
+                key = 39;
                 break;
             case R.id.down_button:
                 Log.d("BUTTON PRESSED","Down");
+                key = 40;
                 break;
-        }    }
+        }
+        try {
+            obj.put("keyCode",key);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(socket.connected()) {
+            socket.emit("key up", obj);
+        }
+    }
 
     public void emitKeyUp(View v) {
-        int id = v.getId();
-        switch(id) {
+        JSONObject obj = new JSONObject();
+        int key = 0;
+
+        switch(v.getId()) {
             case R.id.left_button:
                 Log.d("BUTTON RELEASED","Left");
-//                socket.emit("controller left");
-                break;
-            case R.id.right_button:
-                Log.d("BUTTON RELEASED","Right");
-
+                key = 37;
                 break;
             case R.id.up_button:
                 Log.d("BUTTON RELEASED","Up");
-
+                key = 38;
+                break;
+            case R.id.right_button:
+                Log.d("BUTTON RELEASED","Right");
+                key = 39;
                 break;
             case R.id.down_button:
                 Log.d("BUTTON RELEASED","Down");
+                key = 40;
                 break;
+        }
+        try {
+            obj.put("keyCode",key);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(socket.connected()) {
+            socket.emit("key up",obj);
         }
     }
 
