@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         if(socket.connected()) {
-            socket.emit("key up", obj);
+            socket.emit("key down", obj);
         }
     }
 
